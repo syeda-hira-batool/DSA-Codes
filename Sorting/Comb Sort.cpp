@@ -50,3 +50,13 @@ int main() {
 
     return 0;
 }
+
+/*
+
+Best    ->	O(n log n)
+Average	->  O(n²)
+Worst	->  O(n²)
+Space	->  O(1)
+
+*/ 
+

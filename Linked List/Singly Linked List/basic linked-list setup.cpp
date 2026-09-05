@@ -21,7 +21,7 @@ int main() {
 
     Node* temp = head;
 
-    while (temp != nullptr) {
+    while (temp != NULL) {
         cout << temp->data << " ";
         temp = temp->next;
     }

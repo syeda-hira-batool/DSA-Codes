@@ -1,77 +1,116 @@
 #include <iostream>
+#include <string>
 using namespace std;
 
-class Stack{
-	private:
-	    int stack[10];
-	    int top;
-	
-	public:
-	
-	    Stack(){
-	        top = -1;
-	    }
-	
-	    int isEmpty(){
-	        return top == -1;
-	    }
-	
-	    int isFull(){
-	        return top == 9;
-	    }
-	
-	    void push(int item){
-	        if (!isFull()){
-	            top++;
-	            stack[top] = item;
-	        }
-	        else
-	        {
-	            cout << "Stack Overflow!" << endl;
-	        }
-	    }
-	
-	    int pop(){
-	        if (!isEmpty()){
-	            int item = stack[top];
-	            top--;
-	            return item;
-	        }
-	        else{
-	            cout << "Stack Underflow!" << endl;
-	            return -1;
-	        }
-	    }
-	
-	    int peek(){
-	        if (!isEmpty())
-	            return stack[top];
-	
-	        cout << "Stack is empty!" << endl;
-	        return -1;
-	    }
-	    
-	    void display(){
-	    	for(int i=0; i<=top; i++){
-	    		cout << stack[i] << endl;
-			}
-		}
+class Stack {
+  private:
+    int top;
+    int arr[5];
+
+  public:
+    Stack() {
+      top = -1;
+      for (int i = 0; i < 5; i++) {
+        arr[i] = 0;
+      }
+    }
+
+  bool isEmpty() {
+    if (top == -1)
+      return true;
+    else
+      return false;
+  }
+  bool isFull() {
+    if (top == 4)
+      return true;
+    else
+      return false;
+  }
+
+  void push(int val) {
+    if (isFull()) {
+      cout << "stack overflow" << endl;
+    } else {
+      top++;
+      arr[top] = val;
+    }
+  }
+
+  int pop() {
+    if (isEmpty()) {
+      cout << "stack underflow" << endl;
+      return 0;
+    } else {
+      int popValue = arr[top];
+      arr[top] = 0;
+      top--;
+      return popValue;
+    }
+  }
+
+  int count() {
+    return (top + 1);
+  }
+
+  int peek(int pos) {
+    if (isEmpty()) {
+      cout << "stack underflow" << endl;
+      return 0;
+    } else {
+      return arr[pos];
+    }
+  }
+
+  void change(int pos, int val) {
+    arr[pos] = val;
+    cout << "value changed at location " << pos << endl;
+  }
+
+  void display() {
+    cout << "All values in the Stack are " << endl;
+    for (int i = 4; i >= 0; i--) {
+      cout << arr[i] << endl;
+    }
+  }
 };
 
-int main(){
-	
-	Stack s1;
-	s1.push(3);
-	s1.push(4);
-	s1.push(5);
-	s1.push(7);
-	s1.push(9);
-	s1.push(1);
-	cout << "POP: "<<s1.pop()<<endl;
-	s1.push(2);
-	cout << "PEEK: "<<s1.peek()<<endl;
-	s1.display();
-	
-	return 0;
-	
+int main() {
+  Stack s1;
+
+  // isEmpty() / isFull() on a fresh stack
+  cout << "Is Empty? " << (s1.isEmpty() ? "Yes" : "No") << endl;
+  cout << "Is Full? " << (s1.isFull() ? "Yes" : "No") << endl;
+
+  // push()
+  s1.push(10);
+  s1.push(20);
+  s1.push(30);
+  s1.push(40);
+  s1.push(50); // stack now full
+  s1.push(60); // triggers overflow message
+
+  // isFull() after filling
+  cout << "Is Full? " << (s1.isFull() ? "Yes" : "No") << endl;
+
+  // count()
+  cout << "Count: " << s1.count() << endl;
+
+  // peek()
+  cout << "Peek at position 2: " << s1.peek(2) << endl;
+
+  // change()
+  s1.change(1, 99);
+
+  // display() after changes
+  s1.display();
+
+  // pop()
+  cout << "Popped: " << s1.pop() << endl;
+  cout << "Count after pop: " << s1.count() << endl;
+
+  // display() after pop
+  s1.display();
+
+  return 0;
 }

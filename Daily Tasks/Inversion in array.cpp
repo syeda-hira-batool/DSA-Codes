@@ -1,96 +1,88 @@
-#include<iostream>
+#include <iostream>
 using namespace std;
 
-void display(int arr[] , int n){
-	for(int i=0;i<n;i++){
-		cout << arr[i] << " ";
-	}
-	cout << endl;
-}
+long long merge(int arr[], int temp[], int left, int mid, int right) {
+    int i = left;
+    int j = mid + 1;
+    int k = left;
 
+    long long inversion = 0;
 
-void merge(int arr[], int left, int mid, int right) {
-	
-    int n1 = mid - left + 1;
-    int n2 = right - mid;
-    int L[n1], R[n2];
-
-    for (int i = 0; i < n1; i++)
-        L[i] = arr[left + i];
-
-    for (int j = 0; j < n2; j++)
-        R[j] = arr[mid + 1 + j];
-
-    int i = 0, j = 0, k = left;
-
-    while (i < n1 && j < n2) {
-        if (L[i] <= R[j]) {
-            arr[k] = L[i];
+    while (i <= mid && j <= right) {
+        if (arr[i] <= arr[j]) {
+            temp[k] = arr[i];
             i++;
-        } else {
-            arr[k] = R[j];
+        }
+        else {
+            temp[k] = arr[j];
+            inversion += mid - i + 1;
             j++;
         }
         k++;
     }
 
-    while (i < n1) {
-        arr[k] = L[i];
+    while (i <= mid) {
+        temp[k] = arr[i];
         i++;
         k++;
     }
 
-    while (j < n2) {
-        arr[k] = R[j];
+    while (j <= right) {
+        temp[k] = arr[j];
         j++;
         k++;
     }
+
+    for (int x = left; x <= right; x++) {
+        arr[x] = temp[x];
+    }
+
+    return inversion;
 }
 
-void mergeSort(int arr[], int left, int right) {
-    if (left >= right)
-        return;
+long long mergeSort(int arr[], int temp[], int left, int right) {
+    long long inversion = 0;
+
+    if (left >= right) {
+        return 0;
+    }
 
     int mid = left + (right - left) / 2;
 
-    mergeSort(arr, left, mid);
-    mergeSort(arr, mid + 1, right);
+    inversion += mergeSort(arr, temp, left, mid);
+    inversion += mergeSort(arr, temp, mid + 1, right);
 
-    merge(arr, left, mid, right);
+    inversion += merge(arr, temp, left, mid, right);
+
+    return inversion;
 }
 
+int main() {
+    int n;
 
-void inversionOfArray(int arr[], int n){
-	int total = 0;
-	for(int i=0; i<n; i++){
-		if(arr[i+1] == arr[i]){
-			total = i + total;
-		}
-		else{
-			total = (i+1) + total;
-		}
-	}
-	cout << "Total Inversions: " << total << endl;
+    cout << "Enter the number of elements: ";
+    cin >> n;
+
+    if (n <= 0) {
+        cout << "N must be positive." << endl;
+        return 0;
+    }
+
+    int* arr = new int[n];
+    int* temp = new int[n];
+
+    for (int i = 0; i < n; i++) {
+        cout << "Enter element " << i + 1 << ": ";
+        cin >> arr[i];
+    }
+
+    long long total = mergeSort(arr, temp, 0, n - 1);
+
+    cout << "Total inversions: " << total << endl;
+
+    delete[] arr;
+    delete[] temp;
+
+    return 0;
 }
 
-int main(){
-	int n;
-	cout << "Enter the number of elements of the array: " << endl;
-	cin >> n;
-	int arr[n];
-	int element;
-	for(int i=0;i<n;i++){
-		cout << "Enter the element " << i+1 << " of the array: "<< endl;
-		cin >> element;
-		arr[i] = element;
-	}
-	cout << "Array: " << endl;
-	display(arr, n);
-	cout << "Sorted array: " << endl;
-	mergeSort(arr, 0, n);
-	display(arr, n);
-	inversionOfArray(arr, n);
-	
-	return 0;
-	
-}
